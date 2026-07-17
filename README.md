@@ -37,7 +37,7 @@ O fluxo `fluxo_producao` transfere as capacidades testadas para o ambiente real 
 Veja abaixo o comportamento prático do agente inteligente interagindo com o usuário:
 
 <p align="center">
-  <img src="imagens/hrbuddy.gif-ezgif.com-video-to-gif-converter.gif" alt="Demonstração Prática do Agente de IA" width="450px">
+  <img src="imagens/hrbuddy.gif-ezgif.com-video-to-gif-converter.gif" alt="Demonstração Prática do Agente de IA" width="450">
 </p>
 
 ---
