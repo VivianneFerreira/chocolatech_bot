@@ -1,0 +1,258 @@
+{
+  "name": "fluxo_producao",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "Você é o HR Buddy, assistente virtual de RH da ChocolaTech.\nREGRAS:\n\nSempre responda em português.\nResponda APENAS dúvidas relacionadas a RH.\nIDENTIFICAÇÃO DO FUNCIONÁRIO:\nSe o usuário não disser quem é, pergunte o nome completo dele logo na primeira mensagem.\nUse a ferramenta MySQL para buscar na tabela funcionarios usando SEMPRE o NOME COMPLETO informado pelo usuário na conversa.\nSe encontrado: use os saldos de férias e banco de horas.\nSe não encontrado: não invente dados pessoais. Responda apenas com base nas políticas gerais de RH do Vector Store.\nUse a base de conhecimento para dúvidas gerais."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "9062a0ef-f816-4261-a2cb-826c5949c782",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        192,
+        224
+      ],
+      "id": "63f0ff37-202d-4f73-af32-70a26d28c1b4",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatCohere",
+      "typeVersion": 1,
+      "position": [
+        64,
+        224
+      ],
+      "id": "c0de655b-b6eb-4a53-8ed3-97288f0ec453",
+      "name": "Cohere Chat Model",
+      "credentials": {
+        "cohereApi": {
+          "id": "Tc4i0BeGbwH0FHQr",
+          "name": "Cohere account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Busque informações sobre políticas de RH. férias, horários e rotinas da empresa Chocolatech.",
+        "memoryKey": {
+          "__rl": true,
+          "value": "vector_store_key",
+          "mode": "list",
+          "cachedResultName": "vector_store_key"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        224
+      ],
+      "id": "f219cc9b-457d-40f7-940b-63ff7bd3ef02",
+      "name": "Simple Vector Store"
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v3.0"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "typeVersion": 1,
+      "position": [
+        400,
+        432
+      ],
+      "id": "9423842e-6525-4732-bace-6bd10d497bc7",
+      "name": "Embeddings Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "Tc4i0BeGbwH0FHQr",
+          "name": "Cohere account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "table": {
+          "__rl": true,
+          "value": "=funcionarios",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.5,
+      "position": [
+        608,
+        224
+      ],
+      "id": "806ffc15-7e3b-456b-a3b4-70114f62b7ee",
+      "name": "Select rows from a table in MySQL",
+      "credentials": {
+        "mySql": {
+          "id": "sXGlSNg9josR8A3e",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2ddad802-69f9-41fc-a7fa-f666f1fd73c7",
+      "name": "Telegram Trigger",
+      "webhookId": "30c01594-b821-449d-8ea0-d1440c0fb6c4",
+      "credentials": {
+        "telegramApi": {
+          "id": "Ep9K9UUoKWIhVAC9",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        576,
+        0
+      ],
+      "id": "abafc886-eb62-4806-a015-da379a4a8df3",
+      "name": "Send a text message",
+      "webhookId": "60cfe7d1-b2b2-4410-8763-ba447ef272e7",
+      "credentials": {
+        "telegramApi": {
+          "id": "Ep9K9UUoKWIhVAC9",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cohere Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Simple Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table in MySQL": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "8ab275cc-52ad-4a07-86b2-5a2f2df15a18",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9c9ece7c4f187a49619388fa783395bc5a9bb391f7e1d199d0a35815c10838e8"
+  },
+  "nodeGroups": [],
+  "id": "JyfLRgboJPDmXJsr",
+  "tags": []
+}
