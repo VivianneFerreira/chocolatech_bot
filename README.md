@@ -37,7 +37,7 @@ O fluxo `fluxo_producao` transfere as capacidades testadas para o ambiente real 
 Veja abaixo o comportamento prático do agente inteligente interagindo com o usuário:
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/0f0d644a-c8c5-4085-9dfd-b5a97e958384" width="700" alt="Demonstração Prática do Agente de IA" />
+  <img src="https://github.com/user-attachments/assets/1a9aefa0-ebb6-4db7-86f0-a7467a4c7231" width="700" alt="Demonstração Prática do Agente de IA" />
 </p>
 
 ---
