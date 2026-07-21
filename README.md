@@ -1,3 +1,4 @@
+<img width="1291" height="720" alt="hrbuddy gif-ezgif com-optimize" src="https://github.com/user-attachments/assets/a164f7c8-8b7a-4088-bb19-b83ccacf5ce2" />
 # 🤖 Ecossistema de Agentes de IA com RAG, SQL e Telegram (n8n)
 
 Este repositório contém um ecossistema completo de automação e Inteligência Artificial desenvolvido no **n8n**. O projeto implementa técnicas de **RAG (Retrieval-Augmented Generation)** com banco de dados vetorial, consultas dinâmicas em banco relacional (**MySQL**) e entrega uma interface final ativa para usuários através do **Telegram**.
@@ -37,7 +38,7 @@ O fluxo `fluxo_producao` transfere as capacidades testadas para o ambiente real 
 Veja abaixo o comportamento prático do agente inteligente interagindo com o usuário:
 
 <p align="center">
-  <video src="https://github.com/user-attachments/assets/5b4f5ff3-29c6-499b-9aa0-60fa30b19a7c" width="450" autoplay loop muted playsinline></video>
+  <img src="https://github.com/user-attachments/assets/0f0d644a-c8c5-4085-9dfd-b5a97e958384" width="700" alt="Demonstração Prática do Agente de IA" />
 </p>
 
 ---
